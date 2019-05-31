@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Dog registration</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+		<meta name="viewport" content="width=410, initial-scale=0.90">
+    </head>
+    <body>
+        <div class="container">
+            <div class="content">
+				<h1>Dogs</h1>
+				<hr>
+				  <div align="center">
+            <table><tr><td colspan=2><b>DOG REGISTRATION</td></tr>
+              <tr><td>Dog registered with ID: </td><td>{{ dogid }}</td></tr>
+            </table>
+
+  				  <br><br>
+					<hr>
+
+					</div>
+					<br>
+				<img src="{{ url_for('static', filename='servicedoglogo.jpg') }}" width="270" />
+
+      </div>
+    </div>
+    </body>
+</html>

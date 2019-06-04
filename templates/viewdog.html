@@ -10,8 +10,13 @@
 				<h1>Dogs</h1>
 				<hr>
 				  <div align="center">
-            <table><tr><td colspan=2><b>DOG SEARCH</td></tr>
-              <tr><td>Dog ID: </td><td>{{ dogid }}</td></tr>
+            <h1>Dog info</h1>
+              <table>
+              {% for entry in doginfo %}
+
+                  <tr><td>{{ entry }}</td><td>{{ doginfo[entry] }}</td></tr>
+              {%endfor%}
+
             </table>
 
   				  <br><br>

@@ -13,7 +13,7 @@ from PIL import Image, ImageOps
 import json
 
 app = Flask(__name__)
-
+username = ""
 
 
 @app.route('/')
@@ -36,11 +36,13 @@ def menu():
 def loginform():
 
     global uuid
+    global username
 
     uuid        = request.cookies.get('uuid')
 
 
     if request.method == 'POST':
+
         username    = request.form['username']
         password    = request.form['password']
 
@@ -100,15 +102,35 @@ def searchdog():
 @app.route('/viewdog', methods=['POST']) # displays result of dog ID search in searchdog
 def viewdog():
 
+    global username
+
     outstring = ""
     allvalues = sorted(request.form.items())
     for key,value in allvalues:
         outstring += key + ":" + value + ";"
     print outstring
 
-    dogid = request.form['dogid']
 
-    resp = make_response(render_template('viewdog.html', dogid=dogid))
+    userid = "admin"
+    sd_regid = request.form['dogid']
+
+    url = 'http://servicedogwfe.cfapps.io/api/v1/dog/view'
+
+    # payload = {"userid": username,"sd_regid":sd_regid}
+    payload = {"userid": userid,"sd_regid":sd_regid}
+
+    # response = requests.post(url, payload).text
+    response = requests.get(url, params=payload)
+    print("RESPONSE: %s" % response)
+
+    whatever = json.loads(response.content)
+    # print whatever["sd_regid"]
+    # print whatever["sd_name"]
+
+    # response = allvalues
+
+    resp = make_response(render_template('viewdog.html', doginfo=whatever))
+
     return resp
 
 
@@ -155,58 +177,3 @@ def uid():
 
 if __name__ == "__main__":
 	app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', '5000')), threaded=True)
-
-
-
-
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     global size
-#     global b
-#     global r
-#
-#     file = request.files['file']
-#     if file and allowed_file(file.filename):
-#         # Make the filename safe, remove unsupported chars
-#         filename = secure_filename(file.filename)
-#         justname = filename.rsplit(".",1)[0]
-#         justname = justname + str (int (time.time() * 1000))
-#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#
-#         thumbfile = justname + "-thumb.jpg"
-#         try:
-#             im = Image.open("uploads/" + filename)
-#             thumb = ImageOps.fit(im, size, Image.ANTIALIAS)
-#             thumb.save("uploads/" + thumbfile, "JPEG")
-#             im.close()
-#             thumb.close()
-#         except IOError:
-#             print "cannot create thumbnail for", filename
-#
-#         print "Uploading " + filename + " as key " + justname
-#         k = b.new_key(justname)
-#         k.set_contents_from_filename("uploads/" + filename)
-#         k.set_acl('public-read')
-#
-#
-#
-# @app.route('/suthankyou.html', methods=['POST'])
-# def suthankyou():
-#
-#     uuid = request.cookies.get('uuid')
-#     if not uuid:
-#         uuid = 0
-#     outstring = "uuid:" + str(uuid) + ";"
-#
-#     allvalues = sorted(request.form.items())
-#     for key,value in allvalues:
-#         outstring += key + ":" + value + ";"
-#     print outstring
-#
-#     print "the counter is now: ", Counter
-#     newsurvey = 'survey' + str(Counter)
-#     print "Lets create Redis hash: " , newsurvey
-#     r.hmset(newsurvey,{'review_string':outstring})
-#
-#     resp = make_response(render_template('survey_action.html'))
-#     return resp

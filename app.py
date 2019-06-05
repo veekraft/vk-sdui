@@ -163,7 +163,8 @@ def viewdog():
 
 @app.route('/registerdog', methods=['GET','POST'])
 def registerdog():
-    resp = make_response(render_template('registerdog.html', registrationaction="registrationaction"))
+    global uuid
+    resp = make_response(render_template('registerdog.html', registrationaction="registrationaction", uuid=uuid))
     return resp
 
 @app.route('/registrationaction', methods=['POST']) # displays result of dog ID search in searchdog

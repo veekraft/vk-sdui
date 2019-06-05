@@ -216,13 +216,13 @@ def handlers():
     return resp
 
 
-@app.route('/searchhandler') # search page which submits to viewdog
+@app.route('/searchhandler') # search page which submits to viewhandler
 def searchhandler():
     resp = make_response(render_template('searchhandler.html', viewhandler="viewhandler"))
     return resp
 
 
-@app.route('/viewhandler', methods=['POST']) # displays result of dog ID search in searchdog
+@app.route('/viewhandler', methods=['POST']) # displays result of Handler ID search in searchhandler
 def viewhandler():
 
     global username

@@ -1,0 +1,73 @@
+
+{% include 'head_new.html' %}
+
+<!--Grid column-->
+<div class="col-md-6 mb-4 white-text text-center text-md-left">
+   <!--Card-->
+   <div class="card">
+      <!--Card content-->
+      <div class="card-body">
+         <!-- Main heading -->
+         <h1 class="animated fadeIn text-muted">WELCOME</h1>
+         <p class="animated fadeIn text-muted">This is the registry of Service Dogs and Handlers. <br><br>Please make your selection using the top menu.
+            Status of service dogs and their certified handlers can be verified without the need to log in.
+            Other services require an active and valid login.
+         </p>
+         <center>><img src="{{ url_for('static', filename='servicedoglogo.jpg') }}" width="270" /></center>
+         <!-- Main heading -->
+      </div>
+   </div>
+</div>
+<!--Grid column-->
+
+
+<!--Grid column-->
+<div class="col-md-6 mb-4 white-text text-center text-md-left">
+<!--Card-->
+<div class="card">
+<!--Card content-->
+<div class="card-body">
+<!-- Main heading -->
+<h1 class="animated fadeIn text-muted">ACCOUNT LOGIN</h1>
+{% if loginstatus == "0" %}
+<a href="loginform" class="btn btn-indigo">LOGIN</a>
+<br><br>
+<p class="animated fadeIn text-muted">Login with user: "admin" and password "secret"</p>
+{% else %}
+<a href="dogs" class="btn btn-indigo">DOGS</a>
+<br><br>
+<a href="handlers" class="btn btn-indigo">HANDLERS</a>
+<br><br>
+{% endif %}
+
+<!--Grid row-->
+<div class="row wow fadeIn">
+   <!--Grid column-->
+   <div class="col-md-6 col-xl-5 mb-4">
+      <!--Card-->
+      <div class="card">
+         <!--Card content-->
+         <div class="card-body">
+            <h1 class="animated fadeIn text-muted">ACCOUNT LOGIN</h1>
+            {% if loginstatus == "0" %}
+            <a href="loginform" class="btn btn-indigo">LOGIN</a>
+            <br><br>
+            <p class="animated fadeIn text-muted">Login with user: "admin" and password "secret"</p>
+            {% else %}
+            <a href="dogs" class="btn btn-indigo">DOGS</a>
+            <br><br>
+            <a href="handlers" class="btn btn-indigo">HANDLERS</a>
+            <br><br>
+            {% endif %}
+         </div>
+      </div>
+      <!--/.Card-->
+   </div>
+   <!--Grid column-->
+</div>
+<!--Grid row-->
+
+
+
+
+{% include 'tail_new.html' %}

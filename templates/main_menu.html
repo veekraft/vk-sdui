@@ -1,24 +1,87 @@
-<html>
-    <head>
-        <title>Main Menu</title>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-		<meta name="viewport" content="width=410, initial-scale=0.9">
-		</head>
-    <body>
-        <div class="container">
-            <div class="content">
-				  <h1>MAIN MENU</h1>
-          {% if loginstatus == "0" %}
-				      <a href="loginform" class="btn-blue">LOGIN</a>
-				      <br><br>
-          {% else %}
-            <a href="dogs" class="btn-blue">DOGS</a>
-  				  <br><br>
-            <a href="handlers" class="btn-blue">HANDLERS</a>
-            <br><br>
-          {% endif %}
-			<img src="{{ url_for('static', filename='servicedoglogo.jpg') }}" width="270" />
+
+{% include 'head.html' %}
+
+
+
+<!-- Content -->
+
+<div class="container">
+   <!--Grid row-->
+   <div class="row wow fadeIn">
+      <!--Grid column-->
+      <div class="col-md-6 mb-4 white-text text-center text-md-left">
+         <!--Card-->
+         <div class="card">
+            <!--Card content-->
+            <div class="card-body">
+               <!-- Main heading -->
+               <h1 class="animated fadeIn text-muted">WELCOME</h1>
+               <p class="animated fadeIn text-muted">This is the registry of Service Dogs and Handlers. <br><br>Please make your selection using the top menu.
+                  Status of service dogs and their certified handlers can be verified without the need to log in.
+                  Other services require an active and valid login.
+               </p>
+               <center>><img src="{{ url_for('static', filename='servicedoglogo.jpg') }}" width="270" /></center>
+               <!-- Main heading -->
             </div>
-        </div>
-    </body>
-</html>
+         </div>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-md-6 mb-4 white-text text-center text-md-left">
+         <!--Card-->
+         <div class="card">
+            <!--Card content-->
+            <div class="card-body">
+               <!-- Main heading -->
+               {% if userstatus == "0" %}
+               <h1 class="animated fadeIn text-muted">ACCOUNT LOGIN</h1>
+               <a href="loginform" class="btn btn-indigo">LOGIN</a>
+               <br><br>
+               <p class="animated fadeIn text-muted">Login with user: "admin" and password "secret"</p>
+
+
+             </div>
+          </div>
+          <br>
+          <div class="card">
+             <!--Card content-->
+             <div class="card-body">
+               <h1 class="animated fadeIn text-muted">CHECK STATUS</h1>
+               <p class="animated fadeIn text-muted">The below quick-links are available to verify status of Service Dogs & Handlers. Please scan ID tag and enter the resulting code on the following page.
+               </p>
+               <table width=300 align=center>
+                  <tr>
+                    <td align=center><a href="searchdog" class="btn btn-indigo">DOGS</a></td>
+                    <td align=center><a href="handlers" class="btn btn-indigo">HANDLERS</a></td>
+                  </tr>
+              </table>
+               <br><br>
+
+
+
+               {% else %}
+               <h1 class="animated fadeIn text-muted">CHECK STATUS</h1>
+               <p class="animated fadeIn text-muted">The below quick-links are available to verify status of Service Dogs & Handlers. Please scan ID tag and enter the resulting code on the following page.
+               </p>
+               <table width=300 align=center>
+                  <tr>
+                    <td align=center><a href="dogs" class="btn btn-indigo">DOGS</a></td>
+                    <td align=center><a href="handlers" class="btn btn-indigo">HANDLERS</a></td>
+                  </tr>
+              </table>
+               <br><br>
+               {% endif %}
+               <h2><font color="#C0C0C0">UUID: {{ uuid }}</font></h2>
+               <!-- Main heading -->
+            </div>
+         </div>
+      </div>
+      <!--Grid column-->
+   </div>
+   <!--Grid row-->
+</div>
+<!-- Content -->
+
+
+{% include 'tail.html' %}

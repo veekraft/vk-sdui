@@ -14,16 +14,14 @@ import json
 
 app = Flask(__name__)
 
-## VK adding this to make it easier identifying where we're running
+## Identify where we're running
 if 'VCAP_SERVICES' in os.environ:
     m3api_server = "http://vk-m3engine.cfapps.io"
-    hapi_server = "http://handlers.cfapps.io"
 else:
     m3api_server = "http://127.0.0.1:5050"
-    hapi_server = "http://127.0.0.1:5000"
 
-print(m3api_server, hapi_server)
-## VK end section
+print(m3api_server)
+## 
 
 my_uuid = str(uuid.uuid1())
 username = ""
@@ -240,23 +238,37 @@ def viewhandler():
     m3api_uri = "/api/v1/handler/view"
     url = (m3api_server+m3api_uri)
 
-    # payload = {"userid": username,"sd_regid":sd_regid}
     payload = {"userid": userid,"h_id": h_id}
 
-    # response = requests.post(url, payload).text
     m3api_response = requests.get(url, params=payload)
     print("RESPONSE: %s" % m3api_response)
 
     whatever = json.loads(m3api_response.content)
-    # print whatever["sd_regid"]
-    # print whatever["sd_name"]
-
-    # response = allvalues
 
     resp = make_response(render_template('viewhandler.html', handlerinfo=whatever))
 
     return resp
 
+## Add Handler function
+## I'm doing this without wrapping in HTML because I suck at HTML and CSS
+@app.route('/addhandler'), methods=['POST'])
+def addhandler():
+
+    global username
+
+    outstring = ""
+    allvalues = sorted(request.form.items())
+    for key,value in allvalues:
+        outstring += key + ":" + value + ";"
+    print outstring
+
+    userid = "admin"
+    h_id = request.form['handlerid']
+
+    m3api_uri = "/api/v1/handler/add"
+    url = (m3api_server+m3api_uri)
+
+    payload = {"userid": userid,"h_id": h_id}
 
 
 

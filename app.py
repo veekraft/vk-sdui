@@ -289,6 +289,24 @@ def hregistrationaction():
     
     url = (m3api_server+m3api_uri)
 
+##    ## Upload pic to S3
+##    s3_access_key_id    = ''
+##    s3_secret_key       = ''
+##
+##    session = boto.connect_s3(s3_access_key_id, s3_secret_key, host='s3.us-east-1.amazonaws.com')
+##
+##    bname = 'jwr-piedpiper-01'
+##    b = session.get_bucket(bname)
+##
+##    k = b.new_key(dogpic)
+##    k.set_metadata('dogid', dogid)
+##    k.set_contents_from_filename(dogpic)
+##    k.set_acl('public-read')
+##    ## End Upload pic to S3
+##
+##    ## Do we need to reformat h_picture field before passing it on?
+##    ## h_picture should be a URI to Handler's picture in the S3 bucket
+
     m3api_response = requests.post(url, data=allvalues)
 ##    print ("m3engine response: %s" % m3api_response)
 

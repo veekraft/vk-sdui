@@ -273,12 +273,12 @@ def viewhandler():
 ## Registration page that submits a form to hregistrationaction
 @app.route('/registerhandler', methods=['GET','POST'])
 def registerhandler():
-    global uuid
-    resp = make_response(render_template('registerhandler.html', hregistrationaction="hregistrationaction", uuid=uuid))
-    return resp
-
-@app.route('/hregistrationaction', methods=['POST']) # displays result of handler registration
-def hregistrationaction():
+##    global uuid
+##    resp = make_response(render_template('registerhandler.html', hregistrationaction="hregistrationaction", uuid=uuid))
+##    return resp
+##
+##@app.route('/hregistrationaction', methods=['POST']) # displays result of handler registration
+##def hregistrationaction():
 
     outstring = ""
     allvalues = request.form
@@ -287,37 +287,14 @@ def hregistrationaction():
     m3api_uri = "/api/v1/handler/add"
     url = (m3api_server+m3api_uri)
 
-    m3api_response = requests.post(url, form=allvalues)
-
-##    for key,value in allvalues:
-##        outstring += key + ":" + value + ";"
-##    print outstring
+    m3api_response = requests.post(url, data=allvalues)
+    print ("m3engine response: %s" % m3api_response)
     
-##    h_id = request.form['h_id']
-##    h_name = request.form['h_name']
-##    h_picture  = request.form['h_picture']
-##    
-##
-##    # Get ID from dog registration service
-##    dogid = "123abc"
-##
-##    # Upload pic to S3
-##    s3_access_key_id    = ''
-##    s3_secret_key       = ''
-##
-##    session = boto.connect_s3(s3_access_key_id, s3_secret_key, host='s3.us-east-1.amazonaws.com')
-##
-##    bname = 'jwr-piedpiper-01'
-##    b = session.get_bucket(bname)
-##
-##    k = b.new_key(h_picture)
-##    k.set_metadata('h_id', h_id)
-##    k.set_contents_from_filename(h_pic)
-##    k.set_acl('public-read')
-
-##    resp = make_response(render_template('registeredhandler.html', h_id=h_id))
-    resp = "OK"
-    return resp
+    if m3api_response:
+        resp = {'Result': 'Handler Add from UI - SUCCESS'}
+    else:
+        resp = {'Result': 'Handler Add from UI - FAIL'}
+    return jsonify(resp)
 
 @app.route('/uid')
 def uid():

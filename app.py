@@ -18,10 +18,31 @@ app = Flask(__name__)
 if 'VCAP_SERVICES' in os.environ:
     m3api_server = "http://vk-m3engine.cfapps.io"
 else:
-    m3api_server = "http://127.0.0.1:5050"
+    m3api_server = "http://127.0.0.1:5020"
 
-print(m3api_server)
-## 
+print("workflow engine: %s" % m3api_server)
+
+## Test self
+@app.route('/api/v1/mystatus', methods=["GET"])
+def mystatus():
+    print("UI up and running")
+    response = {'status': "UI up and running"}
+    statuscode = 200
+    return jsonify(response),statuscode
+
+## Test m3engine microservices status
+@app.route('/api/v1/m3status',methods=["GET"])
+def m3status():
+    apiuri = "/api/v1/mystatus"
+
+    m3_status = requests.get(m3api_server+apiuri)
+    if m3_status:
+        response = {'status': "m3engine API returns my ping"}
+        code = 200
+    else:
+        response = {'statuscode': 400}
+        code = 400
+    return jsonify(response), code
 
 my_uuid = str(uuid.uuid1())
 username = ""
@@ -249,28 +270,54 @@ def viewhandler():
 
     return resp
 
-## Add Handler function
-## I'm doing this without wrapping in HTML because I suck at HTML and CSS
-@app.route('/addhandler'), methods=['POST'])
-def addhandler():
+## Registration page that submits a form to hregistrationaction
+@app.route('/registerhandler', methods=['GET','POST'])
+def registerhandler():
+    global uuid
+    resp = make_response(render_template('registerhandler.html', hregistrationaction="hregistrationaction", uuid=uuid))
+    return resp
 
-    global username
+@app.route('/hregistrationaction', methods=['POST']) # displays result of handler registration
+def hregistrationaction():
 
     outstring = ""
-    allvalues = sorted(request.form.items())
-    for key,value in allvalues:
-        outstring += key + ":" + value + ";"
-    print outstring
-
-    userid = "admin"
-    h_id = request.form['handlerid']
-
+    allvalues = request.form
+    print allvalues
+    
     m3api_uri = "/api/v1/handler/add"
     url = (m3api_server+m3api_uri)
 
-    payload = {"userid": userid,"h_id": h_id}
+    m3api_response = requests.post(url, form=allvalues)
 
+##    for key,value in allvalues:
+##        outstring += key + ":" + value + ";"
+##    print outstring
+    
+##    h_id = request.form['h_id']
+##    h_name = request.form['h_name']
+##    h_picture  = request.form['h_picture']
+##    
+##
+##    # Get ID from dog registration service
+##    dogid = "123abc"
+##
+##    # Upload pic to S3
+##    s3_access_key_id    = ''
+##    s3_secret_key       = ''
+##
+##    session = boto.connect_s3(s3_access_key_id, s3_secret_key, host='s3.us-east-1.amazonaws.com')
+##
+##    bname = 'jwr-piedpiper-01'
+##    b = session.get_bucket(bname)
+##
+##    k = b.new_key(h_picture)
+##    k.set_metadata('h_id', h_id)
+##    k.set_contents_from_filename(h_pic)
+##    k.set_acl('public-read')
 
+##    resp = make_response(render_template('registeredhandler.html', h_id=h_id))
+    resp = "OK"
+    return resp
 
 @app.route('/uid')
 def uid():
@@ -278,4 +325,4 @@ def uid():
     return "Your user ID is : " + uuid
 
 if __name__ == "__main__":
-	app.run(debug=True, host='0.0.0.0', port=int(os.getenv('PORT', '5000')), threaded=True)
+	app.run(debug=False, host='0.0.0.0', port=int(os.getenv('PORT', '5030')), threaded=True)

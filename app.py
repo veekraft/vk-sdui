@@ -273,28 +273,34 @@ def viewhandler():
 ## Registration page that submits a form to hregistrationaction
 @app.route('/registerhandler', methods=['GET','POST'])
 def registerhandler():
-##    global uuid
-##    resp = make_response(render_template('registerhandler.html', hregistrationaction="hregistrationaction", uuid=uuid))
-##    return resp
-##
-##@app.route('/hregistrationaction', methods=['POST']) # displays result of handler registration
-##def hregistrationaction():
+    global uuid
+    resp = make_response(render_template('registerhandler.html', hregistrationaction="hregistrationaction", uuid=uuid))
+    return resp
+
+@app.route('/hregistrationaction', methods=['POST']) # displays result of handler registration
+def hregistrationaction():
 
     outstring = ""
     allvalues = request.form
-    print allvalues
-    
+##    print allvalues
+    h_id = request.form['h_id']
+##    print ("h_id requested for creation: %s" % h_id)
     m3api_uri = "/api/v1/handler/add"
+    
     url = (m3api_server+m3api_uri)
 
     m3api_response = requests.post(url, data=allvalues)
-    print ("m3engine response: %s" % m3api_response)
-    
+##    print ("m3engine response: %s" % m3api_response)
+
     if m3api_response:
-        resp = {'Result': 'Handler Add from UI - SUCCESS'}
+        m3api_status = {'Result': 'Handler Add from UI - SUCCESS'}
     else:
-        resp = {'Result': 'Handler Add from UI - FAIL'}
-    return jsonify(resp)
+        m3api_status = {'Result': 'Handler Add from UI - FAIL'}
+##    print m3api_status
+    
+    resp = make_response(render_template('registeredhandler.html', h_id=h_id))
+
+    return resp
 
 @app.route('/uid')
 def uid():
